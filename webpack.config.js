@@ -1,4 +1,5 @@
-const {VueLoaderPlugin} = require('vue-loader');
+var {VueLoaderPlugin} = require('vue-loader');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 /** ------------------ WEBPACK SETTINGS -----------------
@@ -55,10 +56,17 @@ module.exports = {
                         loader: 'file-loader'
                     }
                 ]
+            },
+            {
+
             }
         ]
     },
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            template: './templates/base.html.twig',
+            filename: path.resolve(__dirname, 'templates/layouts/app.html.twig')
+        })
     ]
 }
