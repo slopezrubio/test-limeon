@@ -2,22 +2,10 @@ var {VueLoaderPlugin} = require('vue-loader');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-/** ------------------ WEBPACK SETTINGS -----------------
- * |
- * |  entry =>  The entry point where Webpack is going to
- * |            set in the bundle.
- * |  output => The file of the bundled JavaScript code.
- * |
- * ------------------------------------------------------
- */
 module.exports = {
-    mode: 'development',
     entry: {
+        // The entry point where Webpack is going to set in the bundle.
         app: './app/index.js'
-    },
-    output: {
-        path: path.resolve(__dirname, 'public/bundles/js/'),
-        filename: '[name].[contentHash].bundle.js'
     },
     module: {
         // Loaders will be applied conversely, the first will be the last to be applied
@@ -56,9 +44,6 @@ module.exports = {
                         loader: 'file-loader'
                     }
                 ]
-            },
-            {
-
             }
         ]
     },
