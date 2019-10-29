@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Apartment;
+use App\Entity\Building;
 use App\DataFixtures\AppFixtures;
 use App\DataFixtures\BuildingFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -17,8 +18,10 @@ class ApartmentFixtures extends AppFixtures implements DependentFixtureInterface
         
         $this->createMany(Apartment::class, 9, function(Apartment $apartment, int $count) {
             $apartment->setName($this->faker->lastName);
-            $this->getRandomReference('Building');
+            $apartment->setBuilding($this->getRandomReference(Building::class));
         });
+
+        $manager->flush();
     }
     
     public function getDependencies()

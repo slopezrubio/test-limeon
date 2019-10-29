@@ -13,6 +13,7 @@ abstract class AppFixtures extends Fixture
     /** @var Generator */
     protected $faker;
     protected $manager;
+    private $referencesIndex = [];
 
     protected function createMany(string $className, int $count, callable $factory)
     {
@@ -31,17 +32,13 @@ abstract class AppFixtures extends Fixture
              * set with fake data.
              */
             $this->manager->persist($entity);
-            
-            $fixtureClass = 'App\\DataFixtures\\';
-            
-            $fixtureClass .= explode('\\', $className)[count(explode('\\', $className)) - 1] . 'Fixtures';
 
             /**
              * Creates a reference or identifier to the recent created object
              * so as to be able to relate it when using other objects which
              * depend on this one.
              */
-            $this->setReference($fixtureClass::BUILDING_REFERENCE, $entity);
+            $this->addReference($className . '_' . $i, $entity);
         }
     }
 
@@ -55,11 +52,10 @@ abstract class AppFixtures extends Fixture
     {
         if (!isset($this->referencesIndex[$className])) {
             $this->referencesIndex[$className] = [];
-            foreach ($this->referenceRepository as $key => $value) {
-                /*if (strpos($key, strtoupper($className) . '_REFERENCE')) {
+            foreach ($this->referenceRepository->getReferences() as $key => $value) {
+                if (strpos($key, $className . '_') === 0) {
                     $this->referencesIndex[$className][] = $key;
-                }*/
-                print_r($key);
+                }
             }
         }
 
@@ -68,6 +64,6 @@ abstract class AppFixtures extends Fixture
         }
 
         $randomReferenceKey = $this->faker->randomElement($this->referencesIndex[$className]);
-        return $this->getReference($className::$randomReferenceKey);
+        return $this->getReference($randomReferenceKey);
     }
 }
