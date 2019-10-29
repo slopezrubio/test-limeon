@@ -1,12 +1,14 @@
-const path = require('path');
-const common = require('./webpack.common');
 const merge = require('webpack-merge');
+const common = require('./webpack.common');
+const path = require('path');
 
-module.exports = (common, {
+module.exports = merge(common, {
     mode: 'production', // Minifies the JavaScript and the CSS bundled.
     output: {
         // Path of the bundled file.
-        path: path.resolve(__dirname, 'public/bundles/js/'),
+        path: path.resolve(__dirname, 'public/'),
+
+        publicPath: './',
 
         /*
          * Name of the file bundled encoded with MD5 Hash. This name is going to
@@ -14,6 +16,6 @@ module.exports = (common, {
          * can cache the file if it wasn't modified or can loaded again if the opposite
          * is the case.
          */
-        filename: '[name].[contentHash].bundle.js'
+        filename: 'bundles/js/[name].[contentHash].bundle.js'
     }
 });

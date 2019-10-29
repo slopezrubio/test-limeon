@@ -1,10 +1,15 @@
 <template>
-    <h1>This is rendered with Vue</h1>
+    <job-log-form></job-log-form>
 </template>
 
 <script>
+    import JobLogForm from './components/JobLogForm.vue';
+
     export default {
         name: "App.vue",
+        components: {
+            'job-log-form': JobLogForm,
+        },
     }
 </script>
 

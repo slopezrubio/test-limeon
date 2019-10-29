@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ORM\Table(name="rooms")
  * @ORM\Entity(repositoryClass="App\Repository\RoomRepository")
  */
 class Room
@@ -26,6 +29,16 @@ class Room
      * @ORM\JoinColumn(nullable=false)
      */
     private $apartment;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="room", orphanRemoval=true)
+     */
+    private $actions;
+
+    public function __construct()
+    {
+        $this->actions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,6 +65,37 @@ class Room
     public function setApartment(?Apartment $apartment): self
     {
         $this->apartment = $apartment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(Action $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+            $action->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAction(Action $action): self
+    {
+        if ($this->actions->contains($action)) {
+            $this->actions->removeElement($action);
+            // set the owning side to null (unless already changed)
+            if ($action->getRoom() === $this) {
+                $action->setRoom(null);
+            }
+        }
 
         return $this;
     }
