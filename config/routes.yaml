@@ -1,3 +1,13 @@
 index:
     path: /
     controller: App\Controller\ActionController::index
+api_buildings:
+    path: /api/buildings
+    controller: App\Controller\BuildingApiController::index
+    methods: GET
+api_apartments_by_building:
+    path: /api/buildings/{id}/apartments
+    controller: App\Controller\BuildingApiController::showApartments
+    methods: GET
+    requirements:
+        id: '\d+'

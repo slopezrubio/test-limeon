@@ -10,6 +10,20 @@
         components: {
             'job-log-form': JobLogForm,
         },
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+
+        },
+        created() {
+
+        },
+        mounted() {
+
+        }
     }
 </script>
 

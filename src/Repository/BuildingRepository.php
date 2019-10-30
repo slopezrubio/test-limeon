@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Building;
+use App\Entity\Apartment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Building|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,29 @@ class BuildingRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Building::class);
+    }
+
+    public function findAllWithArray()
+    {
+        $qb = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from(Building::class, 'b')
+            ->orderBy('b.name', 'DESC');
+
+        $query = $qb->getQuery();
+        return $query->getArrayResult();
+    }
+
+    public function findOneByIdJoinedToBuilding($id)
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT a FROM App\Entity\Apartment a
+             WHERE a.building = :id'
+        )->setParameter('id', $id);
+
+        return $query->getArrayResult();
     }
 
     // /**

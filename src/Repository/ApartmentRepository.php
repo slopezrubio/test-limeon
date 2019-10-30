@@ -19,6 +19,15 @@ class ApartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Apartment::class);
     }
 
+    public function findByField($field, $value) {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.:field = :val')
+            ->setParameters(array('field' => $field, 'val' => $value))
+            ->orderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     // /**
     //  * @return Apartment[] Returns an array of Apartment objects
     //  */
