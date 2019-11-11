@@ -28,6 +28,15 @@ class ApartmentRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function findByBuilding($building) {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.building = :val')
+            ->setParameter('val', $building)
+            ->orderBy('a.name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     // /**
     //  * @return Apartment[] Returns an array of Apartment objects
     //  */

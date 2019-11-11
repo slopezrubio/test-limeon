@@ -25,7 +25,7 @@ module.exports = {
                 test: /\.(sc|sa|c)ss?$/, // This is a Regexp that matches '.css', 'scss', and 'sass' extensions.
                 use: [
                     'vue-style-loader', // 4) Finally injects '<style>' tags into the DOM stemming from '.vue' files.
-                    'style-loader', // 3) Injects '<style>' tags into DOM stemming from '.css' files.
+                    //'style-loader', // 3) Injects '<style>' tags into DOM stemming from '.css' files.
                     'css-loader', // 2) Converts a CSS file into a JavaScript code by using 'eval()' without applying the styles.
                     {
                         loader: 'sass-loader', // 1) Converts SASS into CSS code.

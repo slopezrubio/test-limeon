@@ -1,20 +1,19 @@
-const ApartmentStore = {
+const RoomStore = {
     data: {
         debug: true,
     },
     methods: {
-        getApartmentsByBuilding: async ($id) => {
-            let response = await fetch('/api/buildings/' + $id + '/apartments', {
-                method: 'GET',
+        getRoomsByApartment: async ($id) => {
+            let response = await fetch('/api/apartments/' + $id + '/rooms', {
                 headers: {
                     'Accept': 'application/json',
                     'Content-type': 'application/json'
                 }
             });
-            
+
             return await response.json();
         }
-    }
+    },
 }
 
-export default ApartmentStore;
+export default RoomStore;

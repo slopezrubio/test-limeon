@@ -19,6 +19,15 @@ class RoomRepository extends ServiceEntityRepository
         parent::__construct($registry, Room::class);
     }
 
+    public function findByApartment($apartment) {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.apartment = :val')
+            ->setParameter('val', $apartment)
+            ->orderBy('r.name')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
     // /**
     //  * @return Room[] Returns an array of Room objects
     //  */

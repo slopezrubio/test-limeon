@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Building;
+use App\Entity\Apartment;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,16 +26,15 @@ class BuildingApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/building/{id}/apartments")
+     * @Route("/api/buildings/{id}/apartments")
      *
      * @param $id
      * @return JsonResponse
      */
     public function showApartments($id) {
         $apartments = $this->getDoctrine(Building::class)
-                        ->getRepository(Building::class)
-                        ->findOneByIdJoinedToBuilding($id);
-            
+                        ->getRepository(Apartment::class)
+                        ->findByBuilding($id);
         
         return new JsonResponse($apartments);
     }

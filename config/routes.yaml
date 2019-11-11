@@ -11,3 +11,9 @@ api_apartments_by_building:
     methods: GET
     requirements:
         id: '\d+'
+api_rooms_by_apartment:
+    path: /api/apartments/{id}/rooms
+    controller: App\Controller\ApartmentApiController::showRooms
+    methods: GET
+    requirements:
+        id: '\d+'
