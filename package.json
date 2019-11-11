@@ -8,6 +8,7 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/runtime-corejs3": "^7.6.3",
+    "@symfony/webpack-encore": "^0.28.0",
     "babel-loader": "^8.0.6",
     "core-js": "^3.3.5",
     "css-loader": "^3.2.0",
