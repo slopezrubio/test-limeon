@@ -6,8 +6,9 @@
             </select>
         </div>
         <div class="input-field col s10 phone-number__input">
-            <input type="tel" id="icon_telephone" class="validate">
+            <input type="tel" id="icon_telephone" :name="input.id" class="validate" :class="{ invalid: input.error !== '' }">
             <label for="icon_telephone">{{ input.value }}</label>
+            <span class="helper-text" :data-error="input.error"></span>
         </div>
     </div>
 </template>

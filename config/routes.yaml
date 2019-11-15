@@ -1,6 +1,9 @@
 index:
     path: /
     controller: App\Controller\ActionController::index
+show:
+    path: /actions
+    controller: App\Controller\ActionController::show
 api_buildings:
     path: /api/buildings
     controller: App\Controller\BuildingApiController::index
@@ -17,3 +20,7 @@ api_rooms_by_apartment:
     methods: GET
     requirements:
         id: '\d+'
+new_action:
+    path: /actions/new
+    controller: App\Controller\ActionController::new
+    methods: POST

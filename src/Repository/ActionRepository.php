@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Action;
+use App\Entity\Room;
+use App\Entity\Apartment;
+use App\Entity\Building;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +20,21 @@ class ActionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Action::class);
+    }
+
+    /**
+     * @return array
+     */
+    public function all() {
+        return $this->createQueryBuilder('ac')
+            ->select(array('b.name', 'ap.name', 'r.name'))
+            ->from(Action::class, 'a')
+            ->innerJoin(Building::class, 'b', 'WITH', 'b.id = a.building')
+            ->innerJoin(Room::class, 'r', 'WITH', 'r.id = a.room')
+            ->innerJoin(Apartment::class,'ap', 'WITH', 'ap.id = a.apartment')
+            ->orderBy('a.date_of_work', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     // /**

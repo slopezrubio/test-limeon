@@ -29,9 +29,15 @@ class Building
      */
     private $apartments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="building_id")
+     */
+    private $actions;
+
     public function __construct()
     {
         $this->apartments = new ArrayCollection();
+        $this->actions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,6 +82,37 @@ class Building
             // set the owning side to null (unless already changed)
             if ($apartment->getBuilding() === $this) {
                 $apartment->setBuilding(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(Action $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+            $action->setBuildingId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAction(Action $action): self
+    {
+        if ($this->actions->contains($action)) {
+            $this->actions->removeElement($action);
+            // set the owning side to null (unless already changed)
+            if ($action->getBuildingId() === $this) {
+                $action->setBuildingId(null);
             }
         }
 

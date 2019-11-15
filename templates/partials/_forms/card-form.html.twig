@@ -1,0 +1,19 @@
+
+<div class="row card-form">
+    <div class="col s12 m12 offset-l3 l6 offset-xl3 xl6">
+        <div class="card">
+            <div class="row class-content">
+                <div class="col s12 card-title">
+                    <div class="card-title__text col s10">{% block form_title %}{% endblock %}</div>
+                </div>
+
+                {% block fields %}{% endblock %}
+
+            </div>
+            <div class="row card-action">
+                <button type="submit" name="action">Send</button>
+                <button type="reset">Erase</button>
+            </div>
+        </div>
+    </div>
+</div>

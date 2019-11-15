@@ -1,8 +1,10 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import Vue from 'vue';
-import App from './App.vue';
 
-new Vue({
-    render: h => h(App)
-}).$mount('#app');
+Vue.component('job-log-form', require('./components/JobLogForm.vue').default);
+Vue.component('job-list', require('./components/JobList.vue').default);
+
+const app = new Vue({
+    el: '#app'
+});

@@ -1,0 +1,17 @@
+.card-form {
+  .card-action {
+    button {
+      color: #ffab40;
+      cursor: pointer;
+      margin-right: 24px;
+      @include prefixed(transition, color .3s ease);
+      text-transform: uppercase;
+      background: transparent;
+      -webkit-appearance: none;
+      border: none;
+      &:hover {
+        color: #ffd8a6;
+      }
+    }
+  }
+}

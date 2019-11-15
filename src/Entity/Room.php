@@ -31,7 +31,7 @@ class Room
     private $apartment;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="room", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="room_id")
      */
     private $actions;
 
@@ -81,7 +81,7 @@ class Room
     {
         if (!$this->actions->contains($action)) {
             $this->actions[] = $action;
-            $action->setRoom($this);
+            $action->setRoomId($this);
         }
 
         return $this;
@@ -92,8 +92,8 @@ class Room
         if ($this->actions->contains($action)) {
             $this->actions->removeElement($action);
             // set the owning side to null (unless already changed)
-            if ($action->getRoom() === $this) {
-                $action->setRoom(null);
+            if ($action->getRoomId() === $this) {
+                $action->setRoomId(null);
             }
         }
 

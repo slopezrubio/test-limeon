@@ -1,6 +1,6 @@
 <template>
     <div class="input-field col s10">
-        <input type="text" class="datepicker">
+        <input type="text" :name="input.id" class="datepicker">
         <label :for="input.id">{{ input.value }}</label>
     </div>
 </template>

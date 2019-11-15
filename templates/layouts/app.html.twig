@@ -15,6 +15,12 @@
     <!-- Materialize compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+    <!-- CSS Bundle -->
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('main') }}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
     <!-- Materialize compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -22,6 +28,11 @@
 </head>
 <body>
     <div id="app">
+        {% block body %}
+        {% endblock %}
     </div>
-<script type="text/javascript" src="./bundles/js/bundle.js"></script></body>
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock javascripts %}
 </html>

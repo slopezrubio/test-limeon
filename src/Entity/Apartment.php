@@ -35,9 +35,15 @@ class Apartment
      */
     private $rooms;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="apartment_id")
+     */
+    private $actions;
+
     public function __construct()
     {
         $this->rooms = new ArrayCollection();
+        $this->actions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,37 @@ class Apartment
             // set the owning side to null (unless already changed)
             if ($room->getApartment() === $this) {
                 $room->setApartment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Action[]
+     */
+    public function getActions(): Collection
+    {
+        return $this->actions;
+    }
+
+    public function addAction(Action $action): self
+    {
+        if (!$this->actions->contains($action)) {
+            $this->actions[] = $action;
+            $action->setApartmentId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAction(Action $action): self
+    {
+        if ($this->actions->contains($action)) {
+            $this->actions->removeElement($action);
+            // set the owning side to null (unless already changed)
+            if ($action->getApartmentId() === $this) {
+                $action->setApartmentId(null);
             }
         }
 
