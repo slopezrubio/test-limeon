@@ -5,7 +5,6 @@
 {% block fields %}
 
     {% if errors is defined %}
-
         <job-log-form v-bind:errors="{{ errors|json_encode() }}"></job-log-form>
     {% else %}
         <job-log-form></job-log-form>

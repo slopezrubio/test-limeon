@@ -27,12 +27,13 @@ class ActionRepository extends ServiceEntityRepository
      */
     public function all() {
         return $this->createQueryBuilder('ac')
-            ->select(array('b.name', 'ap.name', 'r.name'))
+            ->select(array('a as action', 'b.name as building', 'r.name as room', 'ap.name as apartment'))
             ->from(Action::class, 'a')
-            ->innerJoin(Building::class, 'b', 'WITH', 'b.id = a.building')
-            ->innerJoin(Room::class, 'r', 'WITH', 'r.id = a.room')
-            ->innerJoin(Apartment::class,'ap', 'WITH', 'ap.id = a.apartment')
+            ->innerJoin('a.building', 'b', 'WITH', 'b.id = a.building', 'b.id')
+            ->innerJoin('a.apartment', 'ap', 'WITH', 'ap.id = a.apartment', 'ap.id')
+            ->innerJoin('a.room', 'r', 'WITH', 'r.id = a.room', 'r.id')
             ->orderBy('a.date_of_work', 'DESC')
+            ->distinct()
             ->getQuery()
             ->getArrayResult();
     }

@@ -32,9 +32,9 @@ class ActionController extends AbstractController
             ->getRepository(Action::class)
             ->all();
 
-        var_dump($actions);
-        die();
-        return $this->render('views/actions.html.twig');
+        return $this->render('views/actions.html.twig', [
+            'actions' => $actions
+        ]);
     }
 
     /**

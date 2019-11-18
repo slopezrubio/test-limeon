@@ -9,7 +9,25 @@
             </thead>
 
             <tbody>
-
+                <tr>
+                    <td>
+                        <tr>
+                            <td>
+                                {{ value.action.responsable }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ value.action.email_responsable }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ value.building }}
+                            </td>
+                        </tr>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -19,12 +37,15 @@
     export default {
         name: "job-list",
         props: {
-            actions: Object
+            actions: Array
         },
         data() {
             return {
 
             }
+        },
+        created() {
+            console.log(this.actions);
         }
     }
 </script>
