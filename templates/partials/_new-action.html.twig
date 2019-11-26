@@ -1,13 +1,25 @@
 {% extends './partials/_forms/card-form.html.twig' %}
 
-{% block form_title %}New Task{% endblock %}
+{% block form %}
+    <form action="/actions/new" method="POST" enctype="multipart/form-data">
 
-{% block fields %}
+        <div class="row class-content">
+            <div class="col s12">
+                <div class="col s12 card-title">
+                    <div class="card-title__text">New Task</div>
+                </div>
+            </div>
 
-    {% if errors is defined %}
-        <job-log-form v-bind:errors="{{ errors|json_encode() }}"></job-log-form>
-    {% else %}
-        <job-log-form></job-log-form>
-    {% endif %}
+            {% if errors is not empty %}
+                <job-log-form v-bind:errors="{{ errors|json_encode() }}"></job-log-form>
+            {% else %}
+                <job-log-form></job-log-form>
+            {% endif %}
+        </div>
 
+        <div class="card-action">
+            <button type="submit" name="submit">Send</button>
+            <button type="reset">Erase</button>
+        </div>
+    </form>
 {% endblock %}

@@ -30,7 +30,7 @@ class Building
     private $apartments;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="building_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="building")
      */
     private $actions;
 

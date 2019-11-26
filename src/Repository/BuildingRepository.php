@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Building;
 use App\Entity\Apartment;
+use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
@@ -31,6 +32,17 @@ class BuildingRepository extends ServiceEntityRepository
 
         $query = $qb->getQuery();
         return $query->getArrayResult();
+    }
+
+    public function findBuildingsWithRooms() {
+        return $this->createQueryBuilder('b')
+            ->select('b')
+            ->join(Apartment::class, 'ap', 'WITH', 'b = ap.building')
+            ->join(Room::class, 'r', 'WITH', 'ap = r.apartment')
+            ->orderBy('b.name', 'DESC')
+            ->distinct()
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function findOneByIdJoinedToBuilding($id)

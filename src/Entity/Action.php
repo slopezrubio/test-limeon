@@ -4,13 +4,19 @@ namespace App\Entity;
 
 use App\Validator\Constraints\Alpha;
 use App\Validator\Constraints\MaxNumberOfWords;
+use App\Validator\Constraints\MultipleFiles;
 use Doctrine\ORM\Mapping as ORM;
+use Faker\Provider\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Service\FileUploader;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="actions")
  * @ORM\Entity(repositoryClass="App\Repository\ActionRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Action
 {
@@ -64,7 +70,7 @@ class Action
     private $phone_number_responsable;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     private $attached_files;
 
@@ -167,27 +173,37 @@ class Action
         return $this;
     }
 
-    public function getPhoneNumberResponsable(): ?string
+    public function getPrefix(): ?string
     {
-        return $this->phone_number_responsable;
+        return json_decode($this->phone_number_responsable)->prefix;
     }
 
-    public function setPhoneNumberResponsable(string $prefixes, string $phone_number_responsable): self
+    public function getPhoneNumber(): ?array
+    {
+        return (array) json_decode($this->phone_number_responsable)->phone_number;
+    }
+
+    public function getPhoneNumberResponsable(): ?array
+    {
+        return (array) json_decode($this->phone_number_responsable);
+    }
+
+    public function setPhoneNumberResponsable(string $prefix, string $phone_number_responsable): self
     {
         $this->phone_number_responsable = json_encode([
-            'prefix' => $prefixes,
+            'prefix' => $prefix,
             'phone_number' => $phone_number_responsable
         ]);
 
         return $this;
     }
 
-    public function getAttachedFiles(): ?string
+    public function getAttachedFiles()
     {
         return $this->attached_files;
     }
 
-    public function setAttachedFiles(?string $attached_files): self
+    public function setAttachedFiles(?array $attached_files): self
     {
         $this->attached_files = $attached_files;
 
@@ -218,6 +234,56 @@ class Action
         return $this;
     }
 
+    public static function encodeFields(?array $actions, ?array $fields) {
+        $actionsDecoded = [];
+        foreach ($actions as $property => $action) {
+            for ($i = 0; $i < count($fields); $i++) {
+                $action['action'][$fields[$i]] = (array) json_decode($action['action'][$fields[$i]]);
+            }
+            array_push($actionsDecoded, $action);
+        }
+
+        return $actionsDecoded;
+    }
+
+    public function uploadAttachedFiles(?FileUploader $fileUploader) {
+        if (!empty($this->getAttachedFiles())) {
+            $files = [];
+            foreach ($this->getAttachedFiles() as $index => $fileUploadedObject) {
+                $files[$index]['fileName'] = $fileUploader->upload($fileUploadedObject);
+                $files[$index]['originalFileName'] = $fileUploadedObject->getClientOriginalName();
+            }
+            $this->setAttachedFiles($files);
+        }
+    }
+
+    /**
+     * @ORM\PrePersist
+     *
+     * Encode all the attached files submitted by the user with the properties
+     * that comes within the UploadedFile class.
+     *
+     * @see UploadedFile
+     */
+    public function setAttachedFilesValue() {
+
+        $attachedFilesEncoded = [];
+        foreach ($this->getAttachedFiles() as $index => $file) {
+            if ($file instanceof UploadedFile) {
+                $fileDetails = [];
+                foreach ((array)$file as $key => $value) {
+                    $fileDetails[explode("\0", $key)[count(explode("\0", $key)) - 1]] = $value;
+                }
+                array_push($attachedFilesEncoded, json_encode($fileDetails));
+                //$attachedFilesEncoded[$index] = $fileDetails;
+            } else {
+                array_push($attachedFilesEncoded, json_encode($file));
+            }
+        }
+
+        $this->attached_files = json_encode($attachedFilesEncoded);
+    }
+
     public static function loadValidatorMetadata(ClassMetadata $metadata) {
         $metadata->addPropertyConstraint('building', new Assert\NotBlank());
         $metadata->addPropertyConstraint('apartment', new Assert\NotBlank());
@@ -227,9 +293,8 @@ class Action
         $metadata->addPropertyConstraint('responsable', new Assert\NotBlank());
         $metadata->addPropertyConstraint('responsable', new Alpha());
         $metadata->addPropertyConstraint('phone_number_responsable', new Assert\NotBlank());
-        $metadata->addPropertyConstraint('phone_number_responsable', new Assert\Regex([
+        $metadata->addGetterConstraint('phoneNumber', new Assert\Regex([
             'pattern' => '/^[0-9]{9,10}$/',
-            'match' =>  true,
             'message' => 'The phone number is invalid.'
         ]));
         $metadata->addPropertyConstraint('email_responsable', new Assert\Email([
@@ -239,5 +304,18 @@ class Action
         $metadata->addPropertyConstraint('date_of_work', new Assert\Date());
         $metadata->addPropertyConstraint('date_of_work', new Assert\NotBlank());
         $metadata->addPropertyConstraint('date_of_work', new Assert\NotNull());
+        $metadata->addPropertyConstraint('attached_files', new Assert\All([
+            'constraints' => new Assert\File([
+                'maxSize' => '2048k',
+                'mimeTypes' => [
+                    'application/pdf',
+                    'application/x-pdf',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/msword',
+                    'application/vnd.oasis.opendocument.text'
+                ],
+                'mimeTypesMessage' => 'Unsupported file please be sure to upload a valid PDF, DOC, DOCX or ODT document',
+            ])
+        ]));
     }
 }

@@ -1,13 +1,13 @@
 <template>
-    <div class="row col s10 phone-number">
+    <div class="row col s12 phone-number">
         <div class="input-field phone-number__select col s2">
             <select v-model="selected" name="prefixes" id="prefixes">
                 <option v-for="(option, key) in prefixes" :value="key">{{ option.value }}</option>
             </select>
         </div>
         <div class="input-field col s10 phone-number__input">
-            <input type="tel" id="icon_telephone" :name="input.id" class="validate" :class="{ invalid: input.error !== '' }">
-            <label for="icon_telephone">{{ input.value }}</label>
+            <input type="tel" id="icon_telephone" :value="input.default" :name="input.id" class="validate" :class="{ invalid: input.error !== '' }">
+            <label :class="{ active: input.default !== '' }" for="icon_telephone">{{ input.placeholder }}</label>
             <span class="helper-text" :data-error="input.error"></span>
         </div>
     </div>
@@ -29,6 +29,7 @@
         data() {
             return {
                 selected: this.input.selectedPrefix ? this.input.selectedPrefix : Object.keys(this.prefixes)[0],
+                selector: null,
                 prefixes: {
                     fr: {
                         value: '+33',
@@ -41,8 +42,8 @@
         },
         methods: {
             initSelect: function() {
-                let element = this.$el.querySelector('select');
-                M.FormSelect.init(element);
+                this.selector = this.$el.querySelector('select');
+                M.FormSelect.init(this.selector);
             },
         },
         mounted() {

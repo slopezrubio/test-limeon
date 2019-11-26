@@ -19,8 +19,8 @@ class BuildingApiController extends AbstractController
     public function index()
     {
         $buildings = $this->getDoctrine()
-                        ->getRepository(Building::class)
-                        ->findAllWithArray();
+            ->getRepository(Building::class)
+            ->findBuildingsWithRooms();
 
         return new JsonResponse($buildings);
     }

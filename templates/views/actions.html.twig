@@ -4,9 +4,7 @@
 
 {% block body %}
 
-{#    <form action="/actions/new" method="post">#}
-{#        {% include './partials/_new-action.html.twig' %}#}
-{#    </form>#}
-    {% include './partials/_list-action.html.twig' %}
+    {% set errors = app.flashes('warning') %}
+    {% include './partials/_' ~ app.request.attributes.get('_route') ~ '.html.twig' with errors %}
 
 {% endblock %}

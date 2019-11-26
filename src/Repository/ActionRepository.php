@@ -38,6 +38,16 @@ class ActionRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * @return Object
+     */
+    public function arrayFind($id) {
+        return $this->createQueryBuilder('ac')
+            ->where('ac.id =' . $id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Action[] Returns an array of Action objects
     //  */

@@ -1,9 +1,34 @@
 index:
     path: /
     controller: App\Controller\ActionController::index
-show:
+create-action:
+    path: /actions/new
+    controller: App\Controller\ActionController::create
+    methods: POST
+new-action:
+    path: /actions/new
+    controller: App\Controller\ActionController::new
+    methods: GET
+show-actions:
     path: /actions
     controller: App\Controller\ActionController::show
+    methods: GET
+delete-action:
+    path: /actions/delete/{id}
+    controller: App\Controller\ActionController::delete
+    methods: DELETE
+    requirements:
+        id: '\d+'
+edit-action:
+    path: /actions/{id}
+    controller: App\Controller\ActionController::single
+    methods: GET
+    requirements:
+        id: '\d+'
+update-action:
+    path: /actions/edit/{id}
+    controller: App\Controller\ActionController::update
+    methods: PUT
 api_buildings:
     path: /api/buildings
     controller: App\Controller\BuildingApiController::index
@@ -20,7 +45,3 @@ api_rooms_by_apartment:
     methods: GET
     requirements:
         id: '\d+'
-new_action:
-    path: /actions/new
-    controller: App\Controller\ActionController::new
-    methods: POST

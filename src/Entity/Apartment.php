@@ -36,7 +36,7 @@ class Apartment
     private $rooms;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="apartment_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\Action", mappedBy="apartment")
      */
     private $actions;
 

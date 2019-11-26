@@ -1,0 +1,33 @@
+{% extends './partials/_forms/card-form.html.twig' %}
+
+{% block form %}
+    <form action="/actions/edit/{{ action.id }}" method="POST" enctype="application/x-www-form-urlencoded">
+
+        <div class="row class-content">
+            <div class="col s12">
+                <div class="col s12 card-title">
+                    <div class="card-title__text">
+                        <h1>{{ action.dateOfWork.timestamp|date("d\\t\\h \\o\\f F\, Y", action.dateOfWork.timezone.name) }}</h1>
+                    </div>
+                    <div class="card-title__subtext">
+                        <p class="card-title__subtext--highlighted">{{ action.room.name }}</p>
+                        <p>{{ action.apartment.name }}</p>
+                        <p>{{ action.building.name }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="_method" value="PUT">
+            {% if errors is not empty %}
+                <job-log-form v-bind:action="{{ action|json_encode() }}" v-bind:errors="{{ errors|json_encode() }}"></job-log-form>
+            {% else %}
+                <job-log-form v-bind:action="{{ action|json_encode() }}"></job-log-form>
+            {% endif %}
+        </div>
+
+        <div class="card-action">
+            <button type="submit" name="modify">Modify</button>
+            <button type="reset">Erase</button>
+        </div>
+    </form>
+{% endblock %}

@@ -1,7 +1,40 @@
 .card-form {
+  .card-title {
+    background: #17324f;
+    &__text {
+      width: 100%;
+      color: white;
+      h1 {
+        font-size: 1.5em;
+        margin-top: 1em;
+      }
+    }
+
+    &__subtext {
+      margin-bottom: 1em;
+      p:not(&--highlighted) {
+        font-size: 0.8em;
+        margin: .25em 0;
+        color: white;
+      }
+
+      &--highlighted {
+        color: #C7FF00;
+        font-size: 1em;
+        padding-bottom: 0.5em;
+        border-bottom: 1px solid white;
+      }
+    }
+  }
+
   .card-action {
+    background: lightcoral;
+    padding: 0 .75em;
     button {
-      color: #ffab40;
+      color: #C7FF00;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      height: 100%;
       cursor: pointer;
       margin-right: 24px;
       @include prefixed(transition, color .3s ease);
@@ -9,8 +42,11 @@
       background: transparent;
       -webkit-appearance: none;
       border: none;
+      margin-right: 0;
       &:hover {
         color: #ffd8a6;
+        box-shadow: 2px 2px 10px 3px #888888;
+        transition: all ease-in-out 0.3s;
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
-    <div class="input-field col s10">
-        <textarea :name="textarea.id" :id="textarea.id" class="materialize-textarea validate" :class="{ invalid: textarea.error !== '' }"></textarea>
-        <label :for="textarea.id">{{ textarea.placeholder }}</label>
+    <div class="input-field col s12">
+        <textarea :name="textarea.id" :id="textarea.id" class="materialize-textarea validate" :class="{ invalid: textarea.error !== '' }">{{ textarea.default }}</textarea>
+        <label :class="{ active: textarea.default !== '' }"  :for="textarea.id">{{ textarea.placeholder }}</label>
         <span class="helper-text" :data-error="textarea.error">A short description of the task</span>
     </div>
 </template>
@@ -12,6 +12,11 @@
         props: {
             textarea: Object,
         },
+        data() {
+            return {
+
+            }
+        }
     }
 </script>
 
