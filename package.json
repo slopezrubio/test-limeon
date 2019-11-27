@@ -4,14 +4,14 @@
     "start": "webpack --config webpack.development.js",
     "watch": "webpack --config webpack.development.js --watch",
     "encore:watch": "encore dev --watch",
-    "encore: start": "encore dev",
+    "encore:start": "encore dev",
     "encore:build": "encore production --progress"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/preset-env": "^7.6.3",
     "@babel/runtime-corejs3": "^7.6.3",
-    "@symfony/webpack-encore": "^0.28.0",
+    "@symfony/webpack-encore": "^0.28.2",
     "babel-loader": "^8.0.6",
     "core-js": "^3.3.5",
     "file-loader": "^4.2.0",

@@ -6,7 +6,7 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 
 Encore
     .setOutputPath('public/bundles/')
-    .setManifestKeyPrefix('/bundles')
+    .setManifestKeyPrefix('bundles')
     .setPublicPath('/bundles')
     .cleanupOutputBeforeBuild()
     .addEntry('app', './app/index.js')

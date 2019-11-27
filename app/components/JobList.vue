@@ -1,69 +1,83 @@
 <template>
     <div class="container col s12 m6">
-        <table class="striped action-table" v-for="(value, key) in actions">
-            <thead>
-                <tr class="row action-table__headers">
-                    <th class="col s6">Details</th>
-                    <th class="col s6">Actions</th>
-                </tr>
-            </thead>
+        <div v-if="actions.length > 0" class="row">
+            <table class="striped action-table col s12" v-for="(value, key) in actions">
+                <thead>
+                    <tr class="row action-table__headers">
+                        <th class="col s6">Details</th>
+                        <th class="col s6">Actions</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr class="row">
-                    <td class="col s6 action-table__details">
-                        <tr>
-                            <th>Responsable</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>{{ value.action.responsable }}</p>
-                                <p>{{ value.action.email_responsable }}</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h5>{{ value.room }}</h5>
-                                <p>{{ value.apartment }}</p>
-                                <p>{{ value.building }}</p>
-                            </td>
-                        </tr>
-                    </td>
-                    <td class="col s6">
-                        <tr>
-                            <td>
-                                <a class="waves-effect waves-light btn" @click.stop.prevent="deleteItem" :href="'/actions/delete/' + value.action.id">
-                                    <i class="medium material-icons right">delete</i>delete
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a class="waves-effect waves-light btn" :href="'/actions/' + value.action.id">
-                                    <i class="medium material-icons right">edit</i>edit
-                                </a>
-                            </td>
-                        </tr>
-                    </td>
-                </tr>
-                <tr class="row">
-                    <td class="col s12">
-                        <div class="extra-files">
-                            <div v-if="value.action.attached_files.length > 0" class="fixed-action-btn">
-                                <a class="btn-floating btn-large blue">
-                                    <i class="large material-icons">attach_file</i>
-                                </a>
-                                <ul>
-                                    <li v-for="file in value.action.attached_files">
-                                        <a class="btn-floating green"><i class="material-icons">attach_file</i></a>
-                                        <span class="btn-floating--text">{{ file.originalName }}</span>
-                                    </li>
-                                </ul>
+                <tbody>
+                    <tr class="row">
+                        <td class="col s6 action-table__details">
+                            <tr>
+                                <th>Responsable</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p>{{ value.action.responsable }}</p>
+                                    <p>{{ value.action.email_responsable }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5>{{ value.room }}</h5>
+                                    <p>{{ value.apartment }}</p>
+                                    <p>{{ value.building }}</p>
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="col s6">
+                            <tr>
+                                <td>
+                                    <a class="waves-effect waves-light btn" @click.stop.prevent="deleteItem" :href="'/actions/delete/' + value.action.id">
+                                        <i class="medium material-icons right">delete</i>delete
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="waves-effect waves-light btn" :href="'/actions/' + value.action.id">
+                                        <i class="medium material-icons right">edit</i>edit
+                                    </a>
+                                </td>
+                            </tr>
+                        </td>
+                    </tr>
+                    <tr class="row">
+                        <td class="col s12">
+                            <div class="extra-files">
+                                <div v-if="value.action.attached_files.length > 0" class="fixed-action-btn">
+                                    <a class="btn-floating btn-large blue">
+                                        <i class="large material-icons">attach_file</i>
+                                    </a>
+                                    <ul>
+                                        <li v-for="file in value.action.attached_files">
+                                            <a class="btn-floating green"><i class="material-icons">attach_file</i></a>
+                                            <span class="btn-floating--text">{{ file.originalName }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-else>
+            <div class="row">
+                <table class="striped action-table">
+                    <tr class="row">
+                        <td class="col s12">
+                            <p class="action-table__error-message">No task has been created yet, do you want to create some?</p>
+                            <a :href="url.new" class=" action-table__error-btn waves effect waves-light btn-large"><i class="large left material-icons">add</i>new</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -79,7 +93,8 @@
             return {
                 url: {
                     delete: '/actions/delete/',
-                    edit: '/actions/'
+                    edit: '/actions/',
+                    new: '/actions/new'
                 },
                 floatingButtons: null,
                 instance: null,
@@ -104,7 +119,7 @@
     }
 </script>
 
-<style lang="scss"scoped>
+<style lang="scss" scoped>
 
     .action-table {
         &__headers {
@@ -113,6 +128,25 @@
             font-weight: 500;
             th {
                 padding: 1em;
+            }
+        }
+
+        &__error-message {
+            color: grey;
+            opacity: .7;
+            font-size: 1em;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        &__error-btn {
+            margin: 0 auto;
+            width: 150px;
+            display: block;
+            font-size: 1.2em;
+
+            i {
+                font-size: 2.25rem;
             }
         }
     }
