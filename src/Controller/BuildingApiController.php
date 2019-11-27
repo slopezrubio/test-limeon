@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class BuildingApiController extends AbstractController
 {
     /**
+     * Returns a JSON Response with all the buildings bound to one or more apartments that simultaneously
+     * have one or more rooms linked to them.
+     *
      * @Route("/api/buildings", name="api_buildings")
      *
      * @return JsonResponse
@@ -26,6 +29,8 @@ class BuildingApiController extends AbstractController
     }
 
     /**
+     * Returns a JSON Response with
+     *
      * @Route("/api/buildings/{id}/apartments")
      *
      * @param $id

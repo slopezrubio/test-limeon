@@ -7,6 +7,7 @@ use App\Entity\Apartment;
 use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -22,30 +23,48 @@ class BuildingRepository extends ServiceEntityRepository
         parent::__construct($registry, Building::class);
     }
 
-    public function findAllWithArray()
+    /**
+     * SELECT * FROM buildings ORDER BY b.name DESC
+     *
+     * @return array|null
+     */
+    public function findAllWithArray(): ?array
     {
-        $qb = $this->getEntityManager()
-            ->createQueryBuilder()
+        return $this->createQueryBuilder()
             ->select('b')
             ->from(Building::class, 'b')
-            ->orderBy('b.name', 'DESC');
-
-        $query = $qb->getQuery();
-        return $query->getArrayResult();
+            ->orderBy('b.name', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
-    public function findBuildingsWithRooms() {
+    /**
+     * SELECT DISTINCT * FROM buildings b JOIN apartments ap JOIN rooms r
+     * WHERE ap.building_id = b.id AND WHERE ap.id = r.apartment_id
+     * ORDER BY b.name ASC
+     *
+     * @return array|null
+     */
+    public function findBuildingsWithRooms(): ?array {
         return $this->createQueryBuilder('b')
             ->select('b')
-            ->join(Apartment::class, 'ap', 'WITH', 'b = ap.building')
-            ->join(Room::class, 'r', 'WITH', 'ap = r.apartment')
-            ->orderBy('b.name', 'DESC')
+            ->innerJoin(Apartment::class, 'ap')
+            ->innerJoin(Room::class, 'r')
+            ->where('b.id = ap.building')
+            ->andWhere('ap.id = r.apartment' )
+            ->orderBy('b.name', 'ASC')
             ->distinct()
             ->getQuery()
             ->getArrayResult();
     }
 
-    public function findOneByIdJoinedToBuilding($id)
+    /**
+     * SELECT * FROM apartment a WHERE a.building = $id
+     *
+     * @param $id
+     * @return array
+     */
+    public function findOneByIdJoinedToBuilding($id): ?array
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(

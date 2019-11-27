@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Apartment;
+use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,6 +20,13 @@ class ApartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Apartment::class);
     }
 
+    /**
+     * SELECT * FROM apartment ap WHERE $field = $value
+     *
+     * @param $field
+     * @param $value
+     * @return array
+     */
     public function findByField($field, $value) {
         return $this->createQueryBuilder('a')
             ->andWhere('a.:field = :val')
@@ -28,11 +36,20 @@ class ApartmentRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * SELECT DISTINCT * FROM apartment ap JOIN rooms r ON ap.id = r.apartment_id
+     * WHERE ap.building_id = $building
+     *
+     * @param $building
+     * @return array
+     */
     public function findByBuilding($building) {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.building = :val')
+            ->join(Room::class, 'r', 'WITH', 'a.id = r.apartment')
+            ->where('a.building = :val')
             ->setParameter('val', $building)
             ->orderBy('a.name', 'ASC')
+            ->distinct()
             ->getQuery()
             ->getArrayResult();
     }

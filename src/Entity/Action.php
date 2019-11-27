@@ -234,6 +234,13 @@ class Action
         return $this;
     }
 
+    /**
+     * Returns the given fields encoded in a JSON format.
+     *
+     * @param array|null $actions
+     * @param array|null $fields
+     * @return array
+     */
     public static function encodeFields(?array $actions, ?array $fields) {
         $actionsDecoded = [];
         foreach ($actions as $property => $action) {
@@ -246,6 +253,11 @@ class Action
         return $actionsDecoded;
     }
 
+    /**
+     * Uploads all the passed files inside /public/uploads directory.
+     *
+     * @param FileUploader|null $fileUploader
+     */
     public function uploadAttachedFiles(?FileUploader $fileUploader) {
         if (!empty($this->getAttachedFiles())) {
             $files = [];
@@ -284,6 +296,7 @@ class Action
         $this->attached_files = json_encode($attachedFilesEncoded);
     }
 
+    // Validator
     public static function loadValidatorMetadata(ClassMetadata $metadata) {
         $metadata->addPropertyConstraint('building', new Assert\NotBlank());
         $metadata->addPropertyConstraint('apartment', new Assert\NotBlank());

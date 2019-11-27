@@ -46,7 +46,6 @@ class ActionController extends AbstractController
             json_decode($action['action']['attached_files']);
         }
 
-
         $actions = Action::encodeFields($actions, [
             'phone_number_responsable',
             'attached_files'
@@ -58,6 +57,8 @@ class ActionController extends AbstractController
     }
 
     /**
+     * Show a single action.
+     *
      * @Route("/actions/{id}", name="edit-action")
      *
      * @param $id
@@ -84,6 +85,8 @@ class ActionController extends AbstractController
     }
 
     /**
+     * Validates the action sent by the user, creates the Entity, and saves it into the database.
+     *
      * @Route("/actions/new", name="create-action")
      *
      * @param Request $request
@@ -103,11 +106,15 @@ class ActionController extends AbstractController
         //$errors = $form->getErrors(true, false);
         $errors = $this->getErrorMessages($validator->validate($action));
 
+        /*
+         * If validation fails redirects the user to the same form.
+         */
         if (count($errors) > 0) {
             $request->getSession()->getFlashBag()->set('warning', $errors);
             return $this->redirectToRoute('new-action');
         }
 
+        // Uploads the files
         $action->uploadAttachedFiles($fileUploader);
 
         $entityManager->persist($action);
@@ -117,6 +124,8 @@ class ActionController extends AbstractController
     }
 
     /**
+     * Display the form used to create a new action.
+     *
      * @Route("/actions/new", name="new-action")
      *
      * @return Response
@@ -127,6 +136,8 @@ class ActionController extends AbstractController
     }
 
     /**
+     * Removes the action passed as an argument from the database.
+     *
      * @Route("/actions/delete/{id}", name="delete-action")
      *
      * @param Request $request
@@ -151,6 +162,8 @@ class ActionController extends AbstractController
     }
 
     /**
+     * Updates the action with the data pulled from the view.
+     *
      * @Route("/actions/edit/{id}", name="update-action")
      *
      * @param Request $request
@@ -172,6 +185,9 @@ class ActionController extends AbstractController
 
         $errors = $this->getErrorMessages($validator->validate($action));
 
+        /*
+         * If the validation fails redirects the user to the same form.
+         */
         if (count($errors) > 0) {
             $request->getSession()->getFlashBag()->set('warning', $errors);
             return $this->redirectToRoute('edit-action', [
@@ -184,6 +200,12 @@ class ActionController extends AbstractController
         return $this->redirectToRoute('index');
     }
 
+    /**
+     * Creates an @see Action object with parameter retrieved from the passed request.
+     *
+     * @param Request $request
+     * @param Action $action
+     */
     public function setRequest(Request $request, Action $action) {
         $action->setBuilding($this->getDoctrine()->getRepository(Building::class)->find($request->get('buildings')));
         $action->setApartment($this->getDoctrine()->getRepository(Apartment::class)->find($request->get('apartments')));
@@ -196,6 +218,12 @@ class ActionController extends AbstractController
         $action->setAttachedFiles($request->files->get('action-files'));
     }
 
+    /**
+     * Sents all the validation errors in form of array.
+     *
+     * @param ConstraintViolationListInterface $errors
+     * @return array
+     */
     public function getErrorMessages(ConstraintViolationListInterface $errors) {
         $errorMessages = [];
         foreach ($errors as $error) {

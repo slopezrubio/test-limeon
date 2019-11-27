@@ -93,6 +93,12 @@ class Apartment
         return $this;
     }
 
+    /**
+     * Removes the given room from an apartment Entity.
+     *
+     * @param Room $room
+     * @return $this
+     */
     public function removeRoom(Room $room): self
     {
         if ($this->rooms->contains($room)) {

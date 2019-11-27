@@ -19,6 +19,8 @@ class ApartmentApiController extends AbstractController
     }
 
     /*
+     * Returns a JSON Response with all the rooms associated with the given apartment.
+     *
      * @Route("/api/apartments/{id}/rooms")
      */
     public function showRooms($id) {
