@@ -122,6 +122,11 @@
 <style lang="scss" scoped>
 
     .action-table {
+        p {
+            color: black;
+            font-size: 1em;
+        }
+
         &__headers {
             background: lightcoral;
             color: white;
