@@ -23,7 +23,7 @@
     </code>
   </li>
   <li>
-    <p>Inside the root directory of your project create an <code>.env</code> with the URL of your database following the pattern above:</p>
+    <p>Inside the root directory of your project create an <code>.env</code> with the URL of your database following the pattern below:</p>
     <code>postgresql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=11</code>
   </li>
   <li>
